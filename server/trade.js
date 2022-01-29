@@ -7,8 +7,8 @@ const precision = (number, position = 2) => {
 };
 
 module.exports = (request, response) => {
-    const pair = req.body.pair;
-    const amount = req.body.amount;
+    const pair = request.body.pair;
+    const amount = request.body.amount;
     response.json({ pair: pair, amount: amount });
 
 
