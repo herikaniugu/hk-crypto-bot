@@ -9,10 +9,10 @@ const precision = (number, position) => {
 module.exports = (request, response) => {
     // POST
     const action = request.body.action;
-    const amount = parseFloat(request.body.amount);
-    const price = parseFloat(request.body.price);
-    const limit = parseFloat(request.body.info?.split("/")[0]);
-    const stop = parseFloat(request.body.info?.split("/")[1]);
+    const amount = request.body.amount;
+    const price = request.body.price;
+    const limit = request.body.info?.split(",")[0];
+    const stop = request.body.info?.split(",")[1];
     // ASSET
     const quote = "BTC", base = "USDT";
     const pair = [quote, base].join("/");
