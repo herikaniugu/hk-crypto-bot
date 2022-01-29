@@ -30,7 +30,7 @@ module.exports = (request, response) => {
             // CANCEL
             return await Promise.all(orders.filter((order) => order.symbol === symbol).map((order) => exchange.cancelOrder(order.orderId, order.symbol))).then(async () => {
                 // ORDER
-                response.json({ available: available, positions: positions, orders: orders });
+                response.json({ available: available, orders: orders });
                 // // ORDER
                 // return await exchange.createOrder(pair, "MARKET", action.type === "long" ? "BUY" : "SELL", precision(amount / price, decimal.amount), undefined, { positionSide: "BOTH" }).then(async (order) => {
                 //     // return await exchange.createOrder(pair, "TRAILING_STOP_MARKET", order.side === "buy" ? "SELL" : "BUY", order.amount, resistance, { activationPrice: resistance, callbackRate: 0.08 * 3 }).then(() => {
