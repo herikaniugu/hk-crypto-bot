@@ -39,3 +39,14 @@ module.exports = (request, response) => {
     });
     response.json(request.body);
 };
+
+/*
+WebHook
+http://hk-crypto-bot.herokuapp.com/trade
+{
+  "action": "{{strategy.market_position}}",
+  "amount": {{strategy.order.contracts}},
+  "price": {{strategy.order.price}},
+  "info": "{{strategy.order.alert_message}}"
+}
+*/
