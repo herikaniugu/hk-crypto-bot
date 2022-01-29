@@ -29,13 +29,13 @@ module.exports = (request, response) => {
                 return await exchange.createOrder(pair, "MARKET", action === "long" ? "BUY" : "SELL", precision(amount / price, 3), undefined, { positionSide: "BOTH" }).then(async (order) => {
                     return await exchange.createOrder(pair, "TAKE_PROFIT_MARKET", order.side === "buy" ? "SELL" : "BUY", order.amount, limit, { closePosition: true, stopPrice: limit }).then(async () => {
                         return await exchange.createOrder(pair, "STOP_MARKET", order.side === "buy" ? "SELL" : "BUY", order.amount, stop, { closePosition: true, stopPrice: stop }).then(async () => {
-                            response.json({ action: action, amount: amount, price: price, limit: limit, stop: stop, order: order });
+                            response.json({ request: request.body, order: order });
                         });
                     });
                 });
             });
         });
-        response.json({ action: action, amount: amount, price: price, limit: limit, stop: stop });
+        response.json(request.body);
     });
-    response.json({ action: action, amount: amount, price: price, limit: limit, stop: stop });
+    response.json(request.body);
 };
