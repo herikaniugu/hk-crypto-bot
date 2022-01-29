@@ -11,9 +11,9 @@ module.exports = (request, response) => {
     const action = request.body.action;
     const amount = request.body.amount;
     const price = request.body.price;
-    const limit = request.body.limit;
-    const stop = request.body.stop;
-    // VALUE
+    const limit = request.body.data?.slit("/")[0];
+    const stop = request.body.data?.slit("/")[1];
+    // ASSET
     const quote = "BTC", base = "USDT";
     const pair = [quote, base].join("/");
     const symbol = [quote, base].join("");

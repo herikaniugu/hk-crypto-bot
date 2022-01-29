@@ -1,8 +1,8 @@
 const exchange = require("./exchange");
 
-// PAIR
-const pair = "BTC/USDT";
-const symbol = pair.replace("/", "");
+// ASSET
+const quote = "BTC", base = "USDT";
+const symbol = [quote, base].join("");
 
 // EXPORT
 module.exports = (request, response) => {
@@ -19,8 +19,8 @@ module.exports = (request, response) => {
         // MARGIN
         if (data?.marginType === "cross") return exchange.fapiPrivatePostMarginType({ symbol: symbol, marginType: "ISOLATED", leverage: leverage });
     }).then(() => exchange.fapiPrivatePostLeverage({ symbol: symbol, leverage: leverage })).then((data) => {
-        // RESPONSE
-        response.json({ error: false, data: data });
+        // DATA
+        response.json(data);
     }).catch((error) => {
         // ERROR
         console.log(error);
