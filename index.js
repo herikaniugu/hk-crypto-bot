@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // API
-app.post("/trade", require("./server/trade"));
+app.use("/trade", require("./server/trade"));
 app.use("/balance", require("./server/balance"));
 app.use("/cancel", require("./server/cancel"));
 app.use("/setup", require("./server/setup"));
