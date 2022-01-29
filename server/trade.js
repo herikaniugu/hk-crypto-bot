@@ -1,7 +1,15 @@
 const exchange = require("./exchange");
 
+// PRECISION
+const precision = (number, position = 2) => {
+    const factor = Math.pow(10, position);
+    return Math.floor((position < 0 ? number : 0.01 / factor + number) * factor) / factor;
+};
+
 module.exports = (request, response) => {
-    response.json({ done: true });
+    const pair = req.body.pair;
+    const amount = req.body.amount;
+    response.json({ pair: pair, amount: amount });
 
 
     
