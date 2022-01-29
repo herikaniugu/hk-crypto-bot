@@ -1,28 +1,24 @@
 const exchange = require("./exchange");
 
 // PRECISION
-const precision = (number, position = 2) => {
+const precision = (number, position) => {
     const factor = Math.pow(10, position);
     return Math.floor((position < 0 ? number : 0.01 / factor + number) * factor) / factor;
 };
 
 module.exports = (request, response) => {
-    /*
-    {
-        "pair": "BTCUSDT",
-        "action": "long",
-        "amount": 100,
-        "price": 37739.78,
-        "stop": 37418.19,
-        "limit": 38048.83
-    }
-    */
-    const pair = request.body.pair;
-    const amount = request.body.amount;
+    // POST
     const action = request.body.action;
-    const symbol = pair;
+    const amount = request.body.amount;
+    const price = request.body.price;
+    const limit = request.body.limit;
+    const stop = request.body.stop;
+    // VALUE
+    const quote = "BTC", base = "USDT";
+    const pair = [quote, base].join("/");
+    const symbol = [quote, base].join("");
     // POSITIONS
-    if (["long", "short"].indexOf(action) >= 0) return exchange.fetchPositions().then(async (positions) => {
+    if (["long", "short"].indexOf(action) >= 0 && amount && price && limit && stop) return exchange.fetchPositions().then(async (positions) => {
         // AVAILABLE
         const available = positions.filter((item) => item.info.symbol === symbol && item.entryPrice > 0).length === 0;
         // VIEW
@@ -30,16 +26,13 @@ module.exports = (request, response) => {
             // CANCEL
             return await Promise.all(orders.filter((order) => order.symbol === symbol).map((order) => exchange.cancelOrder(order.orderId, order.symbol))).then(async () => {
                 // ORDER
-                response.json({ available: available, orders: orders });
-                // // ORDER
-                // return await exchange.createOrder(pair, "MARKET", action.type === "long" ? "BUY" : "SELL", precision(amount / price, decimal.amount), undefined, { positionSide: "BOTH" }).then(async (order) => {
-                //     // return await exchange.createOrder(pair, "TRAILING_STOP_MARKET", order.side === "buy" ? "SELL" : "BUY", order.amount, resistance, { activationPrice: resistance, callbackRate: 0.08 * 3 }).then(() => {
-                //     return await exchange.createOrder(pair, "TAKE_PROFIT_MARKET", order.side === "buy" ? "SELL" : "BUY", order.amount, resistance, { closePosition: true, stopPrice: resistance }).then(async () => {
-                //         return await exchange.createOrder(pair, "STOP_MARKET", order.side === "buy" ? "SELL" : "BUY", order.amount, support, { closePosition: true, stopPrice: support }).then(async () => {
-                //             console.log(runtime, { pair: pair, order: order });
-                //         });
-                //     });
-                // });
+                return await exchange.createOrder(pair, "MARKET", action === "long" ? "BUY" : "SELL", precision(amount / price, 3), undefined, { positionSide: "BOTH" }).then(async (order) => {
+                    return await exchange.createOrder(pair, "TAKE_PROFIT_MARKET", order.side === "buy" ? "SELL" : "BUY", order.amount, limit, { closePosition: true, stopPrice: limit }).then(async () => {
+                        return await exchange.createOrder(pair, "STOP_MARKET", order.side === "buy" ? "SELL" : "BUY", order.amount, stop, { closePosition: true, stopPrice: stop }).then(async () => {
+                            response.json({ pair: pair, available: available, orders: orders, order: order });
+                        });
+                    });
+                });
             });
         });
         response.json(request.body);
