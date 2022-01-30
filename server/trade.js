@@ -9,7 +9,7 @@ const precision = (number, position) => {
 module.exports = (request, response) => {
     // POST
     const action = request.body.action;
-    const amount = 10000; //request.body.amount;
+    const amount = request.body.amount;
     const price = request.body.price;
     const limit = request.body.info?.split(",")[0];
     const stop = request.body.info?.split(",")[1];
@@ -45,7 +45,7 @@ WebHook
 http://hk-crypto-bot.herokuapp.com/trade
 {
   "action": "{{strategy.market_position}}",
-  "amount": {{strategy.order.contracts}},
+  "amount": 100,
   "price": {{strategy.order.price}},
   "info": "{{strategy.order.alert_message}}"
 }

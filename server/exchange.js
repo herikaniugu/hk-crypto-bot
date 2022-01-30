@@ -18,7 +18,7 @@ const testnet = new ccxt.binance({
 testnet.setSandboxMode(true);
 
 // EXCHANGE
-const debug = true;
+const debug = false;
 const exchange = debug ? testnet : mainnet;
 
 // EXPORT
