@@ -7,31 +7,31 @@ const strategy = (data) => {
         indicator.cross(data, indicator.sma(data, alpha), indicator.sma(data, beta)).forEach((item) => {
             if (initiate) {
                 if (item.type === "short") {
-                    initiate = false; order.type = "short"; order.source = item.price;
+                    initiate = false; order.type = "short"; order.source = item.open;
                     order.limit = order.source - 400; order.stop = order.source + 400;
                 } else if (item.type === "long") {
-                    initiate = false; order.type = "long"; order.source = item.price;
+                    initiate = false; order.type = "long"; order.source = item.open;
                     order.limit = order.source + 400; order.stop = order.source - 400;
                 }
             } else {
                 if (order.type === "short") {
                     if (item.bounce <= order.limit) {
-                        order.price = item.price; order.bounce = item.bounce; order.outcome = "profit";
-                        order.value = (order.source - order.price) / order.source * 100;
+                        order.price = item.close; order.bounce = item.bounce; order.outcome = "profit";
+                        order.value = (order.source - order.limit) / order.source * 100;
                         cluster.push(Object.assign({}, order)); initiate = true;
                     } else if (item.bounce >= order.stop) {
-                        order.price = item.price; order.bounce = item.bounce; order.outcome = "loss";
-                        order.value = (order.source - order.price) / order.source * 100;
+                        order.price = item.close; order.bounce = item.bounce; order.outcome = "loss";
+                        order.value = (order.source - order.stop) / order.source * 100;
                         cluster.push(Object.assign({}, order)); initiate = true;
                     }
                 } else if (order.type === "long") {
                     if (item.bounce >= order.limit) {
-                        order.price = item.price; order.bounce = item.bounce; order.outcome = "profit";
-                        order.value = (order.price - order.source) / order.price * 100;
+                        order.price = item.close; order.bounce = item.bounce; order.outcome = "profit";
+                        order.value = (order.limit - order.source) / order.limit * 100;
                         cluster.push(Object.assign({}, order)); initiate = true;
                     } else if (item.bounce <= order.stop) {
-                        order.price = item.price; order.bounce = item.bounce; order.outcome = "loss";
-                        order.value = (order.price - order.source) / order.price * 100;
+                        order.price = item.close; order.bounce = item.bounce; order.outcome = "loss";
+                        order.value = (order.stop - order.source) / order.stop * 100;
                         cluster.push(Object.assign({}, order)); initiate = true;
                     }
                 }

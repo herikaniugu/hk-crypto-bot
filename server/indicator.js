@@ -46,7 +46,7 @@ const indicator = {
             const long = alpha[index - 2] < beta[index - 2] && alpha[index - 1] > beta[index - 1];
             const short = alpha[index - 2] > beta[index - 2] && alpha[index - 1] < beta[index - 1];
             const type = long ? "long" : (short ? "short" : "none");
-            if (price?.close) cluster.push({ price: price.close, bounce: price.open > price.close ? price.low : price.high, type: type });
+            if (price?.close) cluster.push({ open: price.open, close: price.close, bounce: price.open > price.close ? price.low : price.high, type: type });
         });
         return cluster;
     }
