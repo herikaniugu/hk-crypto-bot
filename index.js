@@ -18,6 +18,7 @@ app.use("/trade", require("./server/trade"));
 app.use("/balance", require("./server/balance"));
 app.use("/cancel", require("./server/cancel"));
 app.use("/setup", require("./server/setup"));
+app.use("/backtest", require("./server/backtest"));
 
 // LISTEN
 app.listen(port, () => {
