@@ -17,27 +17,27 @@ const strategy = (data) => {
                 if (order.type === "short") {
                     if (item.bounce <= order.limit) {
                         order.price = item.price; order.bounce = item.bounce; order.outcome = "profit";
-                        order.value = indicator.precision((order.source - order.price) / order.source * 100);
+                        order.value = (order.source - order.price) / order.source * 100;
                         cluster.push(Object.assign({}, order)); initiate = true;
                     } else if (item.bounce >= order.stop) {
                         order.price = item.price; order.bounce = item.bounce; order.outcome = "loss";
-                        order.value = indicator.precision((order.source - order.price) / order.source * 100);
+                        order.value = (order.source - order.price) / order.source * 100;
                         cluster.push(Object.assign({}, order)); initiate = true;
                     }
                 } else if (order.type === "long") {
                     if (item.bounce >= order.limit) {
                         order.price = item.price; order.bounce = item.bounce; order.outcome = "profit";
-                        order.value = indicator.precision((order.price - order.source) / order.price * 100);
+                        order.value = (order.price - order.source) / order.price * 100;
                         cluster.push(Object.assign({}, order)); initiate = true;
                     } else if (item.bounce <= order.stop) {
                         order.price = item.price; order.bounce = item.bounce; order.outcome = "loss";
-                        order.value = indicator.precision((order.price - order.source) / order.price * 100);
+                        order.value = (order.price - order.source) / order.price * 100;
                         cluster.push(Object.assign({}, order)); initiate = true;
                     }
                 }
             }
         });
-        const income = cluster.map((item) => item.value);
+        const income = cluster.map((item) => indicator.precision(item.value));
         const win = income.filter((value) => value > 0).reduce((a, b) => a + b, 0);
         const loss = income.filter((value) => value < 0).reduce((a, b) => a + b, 0), total = income.reduce((a, b) => a + b, 0);
         return { alpha: alpha, beta: beta, win: win, loss: loss, total: total, count: cluster.length, data: cluster };
