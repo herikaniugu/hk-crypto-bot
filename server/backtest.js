@@ -42,14 +42,14 @@ const strategy = (data) => {
         const loss = income.filter((value) => value < 0).reduce((a, b) => a + b, 0), total = income.reduce((a, b) => a + b, 0);
         return { alpha: alpha, beta: beta, win: win, loss: loss, total: total, count: cluster.length, data: cluster };
     };
-    const cluster = new Array();
-    for (let alpha = 10; alpha < 200; alpha++) {
-        for (let beta = 10; beta < 200; beta++) {
-            const item = scanner(alpha, beta);
-            cluster.push({ count: item.count, alpha: item.alpha, beta: item.beta, win: item.win, loss: item.loss, total: item.total });
+    const array = new Array();
+    for (let x = 10; x < 200; x++) {
+        for (let y = 10; y < 200; y++) {
+            const item = scanner(x, y);
+            array.push({ count: item.count, alpha: item.alpha, beta: item.beta, win: item.win, loss: item.loss, total: item.total });
         }
     }
-    return cluster.sort((a, b) => b.total - a.total).filter((none, index) => index < 10);
+    return array.sort((a, b) => b.total - a.total).filter((none, index) => index < 10);
 };
 module.exports = (request, response) => {
     exchange.fetchOHLCV("BTC/USDT", "5m").then((data) => {
