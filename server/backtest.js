@@ -45,7 +45,7 @@ const strategy = (data) => {
     const cluster = new Array();
     for (let alpha = 10; alpha < 200; alpha++) {
         for (let beta = 10; beta < 200; beta++) {
-            const item = await scanner(alpha, beta);
+            const item = scanner(alpha, beta);
             cluster.push({ count: item.count, alpha: item.alpha, beta: item.beta, win: item.win, loss: item.loss, total: item.total });
         }
     }
