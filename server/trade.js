@@ -41,8 +41,7 @@ module.exports = (request, response) => {
 };
 
 /*
-WebHook
-http://hk-crypto-bot.herokuapp.com/trade
+Webhook @ http://hk-crypto-bot.herokuapp.com/trade
 {
   "action": "{{strategy.market_position}}",
   "amount": 100,
