@@ -46,28 +46,10 @@ const indicator = {
             const long = alpha[index - 2] < beta[index - 2] && alpha[index - 1] > beta[index - 1];
             const short = alpha[index - 2] > beta[index - 2] && alpha[index - 1] < beta[index - 1];
             const type = long ? "long" : (short ? "short" : "none");
-            if (price?.close) cluster.push({ open: price.open, close: price.close, bounce: price.open > price.close ? price.low : price.high, type: type });
+            if (price) cluster.push({ index: index - 1, open: price.open, close: price.close, high: price.high, low: price.low, type: type });
         });
         return cluster;
     }
-    /*
-    rsi: (data, period = 14) => {
-        const prices = data.map((item) => item.close);
-        let gain = 0, loss = 0, tolerance = 10e-20;
-        for (let index = 1; index < prices.Length; index++) {
-            var difference = prices[index] - prices[index - 1];
-            if (difference >= 0) gain += difference; else loss -= difference;
-        }
-        if (gain == 0) return 0;
-        if (Math.abs(loss) < tolerance) return 100;
-        let rs = (gain / period) / (loss / period);
-        // let rs = gain / loss;
-        return 100 - 100 / (1 + rs);
-    },
-    */
-    // up = ta.rma(math.max(ta.change(rsiSourceInput), 0), rsiLengthInput)
-    // down = ta.rma(-math.min(ta.change(rsiSourceInput), 0), rsiLengthInput)
-    // rsi = down == 0 ? 100 : up == 0 ? 0 : 100 - (100 / (1 + up / down))
 };
 
 module.exports = indicator;
